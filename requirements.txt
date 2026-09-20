@@ -1,0 +1,14 @@
+# Pipeline
+duckdb>=1.1
+pandas>=2.2
+pyarrow>=15
+numpy>=1.26
+scipy>=1.11
+
+# Warehouse
+dbt-core>=1.8
+dbt-duckdb>=1.8
+
+# Charts and tests
+matplotlib>=3.8
+pytest>=8.0

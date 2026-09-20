@@ -1,0 +1,47 @@
+name: Fetch N-PORT quarter
+
+# The SEC's firewall blocks whole IP ranges, including the one this project is
+# developed on, so the download runs on a GitHub runner instead and the data
+# comes back as a build artifact. Start it from the Actions tab.
+on:
+  workflow_dispatch:
+    inputs:
+      quarters:
+        description: 'Quarters to fetch, space separated (e.g. "2026q2" or "2026q2 2026q1")'
+        required: true
+        default: '2026q2'
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Download from the SEC
+        run: python scripts/download.py ${{ inputs.quarters }}
+
+      - name: Show what arrived
+        run: |
+          ls -lh data/raw
+          python - <<'PY'
+          import zipfile, pathlib
+          for z in sorted(pathlib.Path("data/raw").glob("*.zip")):
+              with zipfile.ZipFile(z) as f:
+                  members = f.infolist()
+              raw = sum(m.file_size for m in members)
+              print(f"{z.name}: {z.stat().st_size/1e6:,.0f} MB zipped, {raw/1e6:,.0f} MB unpacked, {len(members)} files")
+              for m in sorted(members, key=lambda m: -m.file_size)[:40]:
+                  print(f"   {m.filename:<44}{m.file_size/1e6:>9,.1f} MB")
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nport-${{ inputs.quarters }}
+          path: data/raw/*.zip
+          retention-days: 7
+          compression-level: 0
