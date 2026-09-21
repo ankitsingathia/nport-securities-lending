@@ -13,9 +13,16 @@ files, and backs off for 1, 3, 7 and 15 minutes when the SEC returns 403.
   file you asked for. A downloader that trusts the filename saves that page as
   `2026q2_nport.zip` and the failure only surfaces much later, somewhere
   confusing. Every download is opened as a zip before it is kept.
-- **Measured on 2026-09-16:** a burst of exploratory requests had this machine
-  blocked site-wide for over 26 minutes, on plain HTML pages as well as files.
-  Retrying harder extends the block; the only fix is to stop asking.
+- **What the block actually is.** A first version of this entry read it as a
+  rate limit on this machine, after a burst of exploratory requests on
+  2026-09-16. It is not. Over the next five days scripted requests got the same
+  page from every network tried: two Indian providers (Jio and BSNL) and a US
+  VPN, with browser-style headers or without, and after long quiet periods. A
+  web browser on the same connection loaded sec.gov normally throughout. The
+  SEC's firewall is refusing scripted clients, not a network.
+- **So the quarterly files are fetched in a browser,** or by the
+  `fetch-nport.yml` workflow on a GitHub runner. `download.py` is kept for
+  networks that are not blocked, and its zip check still guards every file.
 
 ## D-02 · Load every column as text, clean later in the warehouse
 
