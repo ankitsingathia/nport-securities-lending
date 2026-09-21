@@ -1,6 +1,7 @@
 """Resolve filed borrowers to legal entities and parent groups.
 
-    python scripts/resolve.py 2026q2                 # default match threshold
+    python scripts/resolve.py 2026q2                 # one quarter
+    python scripts/resolve.py 2025q3 2025q4 2026q1 2026q2   # history for the trend
     python scripts/resolve.py 2026q2 --match 0.90
     python scripts/resolve.py 2026q2 --calibrate     # show the score distribution first
 
@@ -31,7 +32,7 @@ def connect() -> duckdb.DuckDBPyConnection:
 
 
 def run(con, quarter: str, match: float) -> None:
-    sql = chr(10).join((SQL / f).read_text() for f in ("01_resolve_borrowers.sql", "02_latest_filing.sql", "03_fund_exposure.sql", "04_collateral.sql"))
+    sql = chr(10).join((SQL / f).read_text() for f in ("01_resolve_borrowers.sql", "02_latest_filing.sql", "03_fund_exposure.sql", "04_collateral.sql", "05_history.sql"))
     sql = sql.replace("${QUARTER}", quarter).replace("${MATCH}", str(match))
     import os
     cwd = os.getcwd()
@@ -44,13 +45,16 @@ def run(con, quarter: str, match: float) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("quarter")
+    ap.add_argument("quarters", nargs="+", help="one or more quarters, e.g. 2025q3 2026q2")
     ap.add_argument("--match", type=float, default=0.90, help="min name similarity to trust a filed LEI")
     ap.add_argument("--calibrate", action="store_true")
     args = ap.parse_args(argv)
 
     con = connect()
-    run(con, args.quarter, args.match)
+    for quarter in args.quarters:
+        run(con, quarter, args.match)
+        if len(args.quarters) > 1:
+            print(f"{quarter}: done", flush=True)
 
     if args.calibrate:
         print("Similarity between filed name and registry name for the filed LEI (rows):")

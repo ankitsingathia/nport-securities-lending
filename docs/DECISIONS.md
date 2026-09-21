@@ -140,7 +140,40 @@ collateral is off balance sheet and reported in aggregate by type (Item B.4.b).
 - **Cash is measured at its reinvested value,** so coverage below 100% can also
   mean a reinvestment lost value. The filing cannot separate the two, and the
   write-up says so.
-- **"No collateral recorded" is treated as a tagging gap, not as unsecured
-  lending.** The largest such funds (GMO Alternative Allocation, $216m on
-  loan) hold short-term investment vehicles, the usual home of reinvested cash
-  collateral, that were not tagged as collateral.
+- **"No collateral recorded" is reported as not visible, not as unsecured.**
+  A first version called it a tagging gap, on the grounds that such funds hold
+  short-term investment vehicles that were not tagged as collateral. Measured,
+  that does not hold for the largest case: GMO Alternative Allocation has
+  $216m on loan, no tagged collateral, and only $23m in short-term vehicles;
+  GMO Implementation has $217m on loan, $38m tagged and $22m in such vehicles.
+  The filings do not show where the rest of the collateral sits. It may be held
+  outside the fund's reported holdings, but confirming that needs the funds'
+  annual reports, so the write-up states only what the filing shows.
+
+## D-08 · Trends are read by posting quarter, with each posting's holdings window stated
+
+`scripts/resolve.py` runs every quarter through steps 1-5 and
+`sql/05_history.sql` stores the results tagged by quarter; `sql/06_trend.sql`
+builds the trend tables from them.
+
+- **A posting quarter is not a calendar quarter.** The 2026q2 posting holds
+  portfolios dated February to April 2026; 2025q3 holds May to July 2025.
+  `trend_market` records the window (5th to 95th percentile of holdings dates)
+  for every posting, and charts label postings by that window.
+- **The 2026q2 rise is broad, not one fund.** Lending rose from $280.8bn to
+  $339.0bn. Funds lending in both postings added $46.1bn, 495 new lenders
+  added $14.6bn and 287 that stopped removed $2.5bn. The largest single
+  increase was $1.8bn (Vanguard Total International Stock Index).
+- **A filer contradicting itself in one quarter.** In 2025q4, 63 funds, almost
+  all iShares ETFs, report $25.3bn lent to borrowers while marking every
+  position as not on loan (iShares Russell 2000 ETF: 1,981 of 1,981 holdings
+  flagged "N" against $11bn lent; 1,011 flagged "Y" the next quarter). Market
+  totals come from the borrower section and are unaffected; those funds'
+  2025q4 fund-level ratios are excluded as `no_holding_detail`.
+- **Placeholder LEIs.** Older quarters include `0000000000`, filed against five
+  different banks. Anything not shaped like an LEI is now treated as blank.
+- **Persistence is the signal.** A fund near the lending ceiling or short of
+  collateral once may be timing; in every one of four postings it is a
+  pattern. Three iShares hedged bond ETFs and AlphaCentric Robotics lend 43-47%
+  of net assets in all four postings while staying collateralised; two GMO
+  funds show about 17% visible collateral in all four.

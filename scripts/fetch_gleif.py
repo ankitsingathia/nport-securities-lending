@@ -1,6 +1,6 @@
 """Look up every borrower LEI in GLEIF: registered legal name and ultimate parent.
 
-    python scripts/fetch_gleif.py 2026q2
+    python scripts/fetch_gleif.py 2026q2 2026q1 2025q4 2025q3
 
 GLEIF is the official global LEI registry (api.gleif.org, free, no key). Each
 LEI costs two requests, the record and its ultimate parent, paced at about one
@@ -103,14 +103,16 @@ def roll_up(lei: str) -> tuple[str, str, str, str]:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("quarter")
+    ap.add_argument("quarters", nargs="+", help="every quarter whose borrowers need an entry")
     args = ap.parse_args(argv)
     CACHE.mkdir(parents=True, exist_ok=True)
 
     with duckdb.connect(str(DB), read_only=True) as con:
-        leis = [r[0] for r in con.execute(f'''
-            select distinct upper(trim(LEI)) from "{args.quarter}".borrower
-            where coalesce(trim(LEI), '') not in ('', 'N/A', 'NONE') order by 1''').fetchall()]
+        union = " union ".join(
+            f'select upper(trim(LEI)) as lei from "{q}".borrower' for q in args.quarters)
+        leis = [r[0] for r in con.execute(f"""
+            select distinct lei from ({union})
+            where regexp_full_match(coalesce(lei, ''), '[0-9A-Z]{{18}}[0-9]{{2}}') order by 1""").fetchall()]
     print(f"{len(leis)} distinct borrower LEIs", flush=True)
 
     rows = []
@@ -132,6 +134,8 @@ def main(argv: list[str] | None = None) -> int:
         if i % 20 == 0 or i == len(leis):
             print(f"  {i}/{len(leis)}", flush=True)
 
+    if not rows:
+        raise SystemExit("no LEIs found; refusing to overwrite entities.csv with nothing")
     out = CACHE / "entities.csv"
     with out.open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0]))

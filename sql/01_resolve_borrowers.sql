@@ -30,8 +30,10 @@ select
     BORROWER_ID as borrower_id,
     trim(NAME) as filed_name,
     name_key(NAME) as filed_key,
-    case when upper(trim(coalesce(LEI, ''))) in ('', 'N/A', 'NA', 'NONE') then null
-         else upper(trim(LEI)) end as filed_lei,
+    -- Anything not shaped like an LEI (20 characters, two check digits) is
+    -- treated as blank: filers use placeholders such as '0000000000'.
+    case when regexp_full_match(upper(trim(coalesce(LEI, ''))), '[0-9A-Z]{18}[0-9]{2}')
+         then upper(trim(LEI)) end as filed_lei,
     try_cast(replace(AGGREGATE_VALUE, ',', '') as double) as value_on_loan
 from src."${QUARTER}".borrower;
 
