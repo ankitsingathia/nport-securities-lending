@@ -4,7 +4,8 @@
     python scripts/resolve.py 2026q2 --match 0.90
     python scripts/resolve.py 2026q2 --calibrate     # show the score distribution first
 
-Runs sql/00_macros.sql and sql/01_resolve_borrowers.sql in data/warehouse.duckdb,
+Runs sql/00_macros.sql, 01_resolve_borrowers.sql and 02_latest_filing.sql in
+data/warehouse.duckdb,
 with the raw filings attached read-only, so nothing here can alter them.
 """
 
@@ -29,7 +30,7 @@ def connect() -> duckdb.DuckDBPyConnection:
 
 
 def run(con, quarter: str, match: float) -> None:
-    sql = (SQL / "01_resolve_borrowers.sql").read_text()
+    sql = chr(10).join((SQL / f).read_text() for f in ("01_resolve_borrowers.sql", "02_latest_filing.sql"))
     sql = sql.replace("${QUARTER}", quarter).replace("${MATCH}", str(match))
     import os
     cwd = os.getcwd()

@@ -78,3 +78,20 @@ asking GLEIF for its ultimate parent:
 **Lapsed** LEIs (not renewed) are kept as they are: the firm still exists. They
 are flagged in the audit. On 2026q2, Janney Montgomery Scott ($0.6bn) and TD
 Prime Services ($0.2bn) are filed under lapsed LEIs.
+
+## D-05 · One snapshot per fund: latest holdings date, then latest filing
+
+A quarterly posting holds everything disseminated in the quarter. On 2026q2,
+12,945 funds made 14,416 filings: 677 funds appear more than once, 393 with two
+holdings months, 70 with an amendment replacing the same month, and 213 with
+both. `sql/02_latest_filing.sql` keeps, per fund series, the latest holdings
+date and within it the latest filing, so an amendment supersedes the original.
+
+- **The date that matters is `REPORT_DATE`**, the as-of date of the portfolio.
+  `REPORT_ENDING_PERIOD` is the fund's fiscal year end and can lie in the future
+  (31 August 2026 on a February 2026 portfolio). The first version of this check
+  used it by mistake.
+- **Effect:** total lending falls from $383.6bn to $339.0bn. Summing the posting
+  as-is overstates the market by $44.6bn, or 11.6%.
+- **Comparability:** 99.9% of funds' latest holdings fall between February and
+  April 2026, so one snapshot per fund is a consistent cross-section.
