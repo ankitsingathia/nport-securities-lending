@@ -95,3 +95,28 @@ date and within it the latest filing, so an amendment supersedes the original.
   as-is overstates the market by $44.6bn, or 11.6%.
 - **Comparability:** 99.9% of funds' latest holdings fall between February and
   April 2026, so one snapshot per fund is a consistent cross-section.
+
+## D-06 · Fund exposure is measured per borrower group, and only on funds whose two reports agree
+
+`sql/03_fund_exposure.sql` measures each fund on its latest snapshot:
+lending as a share of net assets, and its largest single borrower group as a
+share of net assets and of its own lending.
+
+- **Group, not entity:** a fund lending to three JPMorgan entities has one
+  JPMorgan exposure. Unresolved borrowers stay as their own group under their
+  filed name; they are never dropped.
+- **Two reports must agree:** a filing states its lending twice, per borrower
+  (Item B.4) and per holding (Item C.12). A fund counts only if the two agree
+  within 1% (or $1,000). On 2026q2, 4,038 of 4,109 lending funds reconcile,
+  covering $337.9bn of $339.0bn. 39 funds ($1.1bn) do not and are flagged, not
+  ranked; 32 report borrowers but no holding-level detail.
+- **Reading the ceiling:** SEC staff guidance limits a fund's lending to one
+  third of total assets, and total assets include the collateral received,
+  which puts the practical ceiling at about half of net assets. The largest
+  lender on 2026q2 sits at 50.9% of net assets. That is noted as being at the
+  ceiling, not as a breach: holdings and net assets are valued at slightly
+  different moments, and the filing is not an audit.
+- **Result on 2026q2:** the median lending fund has 1.7% of net assets on loan;
+  the 99th percentile has 27.8%. Half of lending funds place at least half of
+  their lending with one group. The largest single-borrower exposures reach
+  49% of net assets (AdvisorShares Dorsey Wright FSM, to Barclays).
