@@ -1,7 +1,7 @@
 -- Resolve every filed borrower to a legal entity (LEI) and a parent group.
 -- Needs the macros in 00_macros.sql, the raw quarter attached as `src`, and
--- data/gleif/entities.csv from scripts/fetch_gleif.py. ${QUARTER} and
--- ${MATCH} are filled in by scripts/resolve.py. Rules: DECISIONS D-03.
+-- data/gleif/entities.csv from scripts/fetch_gleif.py. ${QUARTER}, ${MATCH}
+-- and ${GLEIF_CSV} are filled in by scripts/resolve.py. Rules: DECISIONS D-03.
 --
 -- A string-similarity threshold alone cannot do this. Calibration on 2026q2:
 -- branches and initials score low but are right ("CIBC NEW YORK" vs Canadian
@@ -22,7 +22,7 @@
 create or replace table gleif as
 select lei, legal_name, registration_status, country, parent_lei, parent_name, parent_basis,
        name_key(legal_name) as gleif_key, name_key(parent_name) as parent_key
-from read_csv('data/gleif/entities.csv', header = true, all_varchar = true);
+from read_csv('${GLEIF_CSV}', header = true, all_varchar = true);
 
 create or replace table borrower_filed as
 select
