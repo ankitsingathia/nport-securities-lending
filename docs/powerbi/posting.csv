@@ -1,0 +1,5 @@
+quarter,holdings_from,holdings_to,holdings_label,posting_order
+2025q3,2025-05-31,2025-07-31,May 2025 to Jul 2025,1
+2025q4,2025-08-31,2025-10-31,Aug 2025 to Oct 2025,2
+2026q1,2025-11-30,2026-01-31,Nov 2025 to Jan 2026,3
+2026q2,2026-02-28,2026-04-30,Feb 2026 to Apr 2026,4
