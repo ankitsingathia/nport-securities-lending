@@ -52,10 +52,11 @@ class Quarter:
         return self._ids
 
     def filing(self, series_id: str, series_name: str, net_assets: float, report_date: str = "28-FEB-2026",
-               filing_date: str = "20-APR-2026", sub_type: str = "NPORT-P", noncash_flag: str = "N") -> str:
+               filing_date: str = "20-APR-2026", sub_type: str = "NPORT-P", noncash_flag: str = "N",
+               fiscal_year_end: str = "31-DEC-2026") -> str:
         acc = f"0000000000-26-{self._next():06d}"
         self.rows["submission"].append({"ACCESSION_NUMBER": acc, "FILING_DATE": filing_date, "SUB_TYPE": sub_type,
-                                        "REPORT_ENDING_PERIOD": "31-DEC-2026", "REPORT_DATE": report_date})
+                                        "REPORT_ENDING_PERIOD": fiscal_year_end, "REPORT_DATE": report_date})
         self.rows["fund_reported_info"].append({"ACCESSION_NUMBER": acc, "SERIES_ID": series_id,
                                                 "SERIES_NAME": series_name, "NET_ASSETS": str(net_assets),
                                                 "TOTAL_ASSETS": str(net_assets),
