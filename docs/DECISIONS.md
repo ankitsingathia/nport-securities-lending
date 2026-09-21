@@ -162,8 +162,11 @@ builds the trend tables from them.
   for every posting, and charts label postings by that window.
 - **The 2026q2 rise is broad, not one fund.** Lending rose from $280.8bn to
   $339.0bn. Funds lending in both postings added $46.1bn, 495 new lenders
-  added $14.6bn and 287 that stopped removed $2.5bn. The largest single
-  increase was $1.8bn (Vanguard Total International Stock Index).
+  added $14.6bn and 287 that stopped removed $2.5bn. The largest increase by a
+  fund lending in both postings was $1.8bn (Vanguard Total International Stock
+  Index); the largest new lender added $3.4bn (Invesco S&P 500 Equal Weight
+  ETF). An earlier version quoted only the first figure as the largest single
+  contribution, which was wrong.
 - **A filer contradicting itself in one quarter.** In 2025q4, 63 funds, almost
   all iShares ETFs, report $25.3bn lent to borrowers while marking every
   position as not on loan (iShares Russell 2000 ETF: 1,981 of 1,981 holdings
