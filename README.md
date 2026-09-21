@@ -82,7 +82,7 @@ below was measured on the real data before any figure was quoted:
 | Collateral not visible | GMO funds' filings do not show collateral for about $0.5bn of loans | Reported as not visible, not as unsecured; confirming it needs the funds' annual reports |
 
 Each rule, and the alternatives rejected, is recorded in
-[docs/DECISIONS.md](docs/DECISIONS.md). Four of the entries describe errors in
+[docs/DECISIONS.md](docs/DECISIONS.md). Five of the entries describe errors in
 earlier versions of this analysis and how they were caught.
 
 ## Limitations
