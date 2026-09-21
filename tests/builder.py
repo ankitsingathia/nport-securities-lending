@@ -67,14 +67,15 @@ class Quarter:
         self.rows["borrower"].append({"ACCESSION_NUMBER": acc, "BORROWER_ID": str(self._next()), "NAME": name,
                                       "LEI": lei_ or "", "AGGREGATE_VALUE": str(value)})
 
-    def position_on_loan(self, acc: str, value: float) -> None:
+    def position_on_loan(self, acc: str, value: float, flagged: str = "Y") -> None:
+        """A holding with its lending detail. flagged="N" reproduces a filer marking it not on loan."""
         hid = str(self._next())
         self.rows["fund_reported_holding"].append({"ACCESSION_NUMBER": acc, "HOLDING_ID": hid,
                                                    "ISSUER_NAME": "Some Issuer", "ASSET_CAT": "EC",
                                                    "CURRENCY_VALUE": str(value)})
         self.rows["securities_lending"].append({"HOLDING_ID": hid, "IS_CASH_COLLATERAL": "N",
-                                                "IS_NON_CASH_COLLATERAL": "N", "IS_LOAN_BY_FUND": "Y",
-                                                "LOAN_VALUE": str(value)})
+                                                "IS_NON_CASH_COLLATERAL": "N", "IS_LOAN_BY_FUND": flagged,
+                                                "LOAN_VALUE": str(value) if flagged == "Y" else None})
 
     def cash_collateral(self, acc: str, amount: float, vehicle: str = "Collateral Pool") -> None:
         hid = str(self._next())
