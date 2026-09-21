@@ -120,3 +120,27 @@ share of net assets and of its own lending.
   the 99th percentile has 27.8%. Half of lending funds place at least half of
   their lending with one group. The largest single-borrower exposures reach
   49% of net assets (AdvisorShares Dorsey Wright FSM, to Barclays).
+
+## D-07 · Collateral coverage is read with its timing and tagging limits stated
+
+`sql/04_collateral.sql` puts each fund's collateral against its loans. Cash
+collateral appears as the holdings it was reinvested in (Item C.12); non-cash
+collateral is off balance sheet and reported in aggregate by type (Item B.4.b).
+
+- **Internal consistency:** the 1,725 funds with non-cash collateral rows are
+  exactly the 1,725 whose own flag says non-cash collateral was received.
+- **Market level, 2026q2:** $270.1bn of cash (reinvested) and $79.3bn of
+  non-cash collateral, mostly US Treasuries, against $339.0bn on loan: 103.3%
+  coverage. The median fund is at 102.4%, inside the usual 102-105% range.
+- **"Under 100%" is not read literally.** 572 funds with $39.5bn on loan are
+  below 100%, but loans are re-marked daily and the filing freezes prices
+  between marks. Three quarters of that value is within 3 points of full cover.
+  The actual shortfall is $1.6bn, about 0.5% of lending, and the meaningful
+  gaps sit in 49 funds below 90%.
+- **Cash is measured at its reinvested value,** so coverage below 100% can also
+  mean a reinvestment lost value. The filing cannot separate the two, and the
+  write-up says so.
+- **"No collateral recorded" is treated as a tagging gap, not as unsecured
+  lending.** The largest such funds (GMO Alternative Allocation, $216m on
+  loan) hold short-term investment vehicles, the usual home of reinvested cash
+  collateral, that were not tagged as collateral.
