@@ -7,6 +7,7 @@ portfolio, its securities lending, and each borrower by name and Legal Entity
 Identifier (LEI). Four quarterly postings are covered, with portfolios dated
 May 2025 to April 2026.
 
+**[Read the write-up, with charts](https://ankitsingathia.github.io/nport-securities-lending/docs/readout.html)** ·
 [Decision log](docs/DECISIONS.md)
 
 | Funds filing | Lending funds | On loan | Borrower groups | Top five borrowers | Collateral cover |
