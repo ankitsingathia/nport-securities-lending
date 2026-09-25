@@ -8,6 +8,7 @@ Identifier (LEI). Four quarterly postings are covered, with portfolios dated
 May 2025 to April 2026.
 
 **[Read the write-up, with charts](https://ankitsingathia.github.io/nport-securities-lending/docs/readout.html)** ·
+[Dashboard, two pages as PDF](docs/powerbi/securities_lending.pdf) ·
 [Decision log](docs/DECISIONS.md)
 
 | Funds filing | Lending funds | On loan | Borrower groups | Top five borrowers | Collateral cover |
@@ -111,8 +112,9 @@ earlier versions of this analysis and how they were caught.
 | Collateral | `sql/04_collateral.sql` adds reinvested cash and non-cash collateral against loans |
 | History and trend | `sql/05_history.sql`, `sql/06_trend.sql` and `scripts/trend.py` compare the four postings |
 | Tests | 55 tests run the real SQL on small built quarters with planted problems, with no network access |
+| Dashboard | Power BI over the five exported tables, one posting dimension and four fact tables, with every figure on it checked against this README ([how it was built](docs/POWERBI.md)) |
 
-**Stack:** DuckDB SQL, Python, the GLEIF API, pytest, GitHub Actions.
+**Stack:** DuckDB SQL, Python, the GLEIF API, pytest, GitHub Actions, Power BI.
 
 ## Reproducing the analysis
 
@@ -138,6 +140,6 @@ python scripts/trend.py
 scripts/     download, ingest, registry lookups, pipeline runner, trend report
 sql/         the warehouse steps, 00 to 06, each documented at the top
 tests/       the test builder and one file per data problem
-docs/        decision log
+docs/        decision log, write-up, Power BI report and the data behind it
 .github/     the SEC download workflow
 ```
