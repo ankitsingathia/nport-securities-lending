@@ -17,6 +17,8 @@ May 2025 to April 2026.
 
 *Latest posting (2026 Q2, portfolios dated February to April 2026).*
 
+![Share of all US fund securities lending, by borrower group, latest posting: Barclays 14.6%, JPMorgan 12.6%, Morgan Stanley 11.9%, Goldman Sachs 11.0%, Citigroup 8.3%, Bank of America 7.9%, BNP Paribas 6.9%, Wells Fargo 3.3%](docs/img/borrowers.png)
+
 ## Key findings
 
 1. **Five banks borrow most of what US funds lend.** Barclays (14.6%),
@@ -36,6 +38,8 @@ May 2025 to April 2026.
    for the first time (Invesco S&P 500 Equal Weight ETF).
    JPMorgan gained the most share over the year (+1.9 points), while Bank of
    America and State Street each lost about 1.5 points.
+
+   ![Share of fund lending across the four postings for Barclays, JPMorgan, Morgan Stanley and Goldman Sachs](docs/img/share-over-time.png)
 4. **Most funds lend little, but a few lend right up to the limit.** The
    median lending fund has 1.7% of its net assets on loan and the 99th
    percentile 27.8%. SEC guidance caps lending at about half of net assets
@@ -87,6 +91,20 @@ Each rule, and the alternatives rejected, is recorded in
 [docs/DECISIONS.md](docs/DECISIONS.md). Five of the entries describe errors in
 earlier versions of this analysis and how they were caught.
 
+## Dashboard
+
+A two-page Power BI report over the same tables, for reading the findings by
+posting and by fund. Every figure on it matches the numbers above.
+
+[![Page one of the Power BI report: lending totals, the borrower ranking, and both trends](docs/img/dashboard.png)](docs/powerbi/securities_lending.pdf)
+
+Page one answers who borrows and how concentrated that is. Page two is the
+watchlist: how much of its net assets each fund has on loan, who its largest
+borrower is, whether collateral covers it, and the seven funds carrying the
+same problem in all four postings. The report is
+[securities_lending.pbix](docs/powerbi/securities_lending.pbix), and the
+[PDF](docs/powerbi/securities_lending.pdf) opens without Power BI.
+
 ## Limitations
 
 - **Filings are not audited.** Figures are as reported by each fund.
@@ -100,6 +118,8 @@ earlier versions of this analysis and how they were caught.
   between a fund and the same bank elsewhere are not visible in N-PORT.
 
 ## Method
+
+![Pipeline: SEC N-PORT data sets and the GLEIF registry load into DuckDB, six SQL steps resolve borrowers and measure exposure and collateral, and the results feed the write-up and the Power BI report, with 55 tests running the same SQL on built quarters](docs/img/pipeline.svg)
 
 | Stage | Implementation |
 |---|---|
